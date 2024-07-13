@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Satoshi - Revolucionando Investimentos</title>
+    <meta name="description" content="Satoshi é um app inovador que revoluciona o mundo dos investimentos através de gamificação e tecnologia de ponta.">
+    <meta property="og:title" content="Satoshi - Revolucionando Investimentos">
+    <meta property="og:description" content="Descubra uma nova maneira de investir com Satoshi. Aprenda, pratique e compita em um ambiente gamificado.">
+    <meta property="og:image" content="https://seusite.com/imagens/og-image.jpg">
+    <meta property="og:url" content="https://sousatoshi.com">
+    <meta name="twitter:card" content="summary_large_image">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <style>
+        :root {
+            --neon-green: #39FF14;
+            --dark-bg: #050505;
+            --text-color: #ffffff;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--text-color);
+            overflow-x: hidden;
+        }
+        
+        #canvas-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        header {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 2rem 0;
+        }
+        
+        .logo {
+            width: 400px;
+            margin-bottom: 2rem;
+        }
+        
+        h1 {
+            font-size: 1.0rem;
+            margin-bottom: 1rem;
+            text-shadow: 0 0 10px var(--neon-green);
+        }
+        
+        .button {
+            background-color: transparent;
+            border: 2px solid var(--neon-green);
+            color: var(--neon-green);
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 1rem;
+        }
+        
+        .button:hover {
+            background-color: var(--neon-green);
+            color: var(--dark-bg);
+            transform: scale(1.05);
+            box-shadow: 0 0 20px var(--neon-green);
+        }
+        
+        .mockup-container {
+            margin-top: 3rem;
+            text-align: center;
+        }
+        
+        .mockup-image {
+            max-width: 30%;
+            height: auto;
+            box-shadow: 0 0 30px rgba(57, 255, 20, 0.3);
+            border-radius: 20px;
+        }
+
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 1rem;
+            background-color: rgba(5, 5, 5, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+        }
+        
+        nav ul {
+            display: flex;
+            justify-content: center;
+            list-style-type: none;
+        }
+        
+        nav ul li {
+            margin: 0 1rem;
+        }
+        
+        nav ul li a {
+            color: var(--text-color);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        nav ul li a:hover {
+            color: var(--neon-green);
+        }
+        
+        section {
+            padding: 5rem 0;
+        }
+        
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        
+        .feature {
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
+            padding: 2rem;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+        
+        .feature:hover {
+            transform: translateY(-10px);
+        }
+        
+        .feature h3 {
+            color: var(--neon-green);
+            margin-bottom: 1rem;
+        }
+        
+        #signup-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.8);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        #signup-form {
+            background-color: var(--dark-bg);
+            padding: 2rem;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 500px;
+        }
+        
+        #signup-form input,
+        #signup-form select {
+            width: 100%;
+            padding: 0.5rem;
+            margin-bottom: 1rem;
+            background-color: rgba(255,255,255,0.1);
+            border: none;
+            border-radius: 5px;
+            color: var(--text-color);
+        }
+        
+        #signup-form button {
+            width: 100%;
+            padding: 1rem 2rem;
+            background-color: transparent;
+            color: var(--neon-green);
+            border: 2px solid var(--neon-green);
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            opacity: 0.5;
+        }
+
+        #signup-form button:hover:not(:disabled) {
+            background-color: var(--neon-green);
+            color: var(--dark-bg);
+            transform: scale(1.05);
+            box-shadow: 0 0 20px var(--neon-green);
+        }
+
+        #signup-form button:disabled {
+            cursor: not-allowed;
+        }
+
+        #signup-form button.active {
+            opacity: 1;
+        }
+
+        #signup-form input[type="checkbox"] {
+            width: auto;
+            margin-right: 10px;
+        }
+
+        #signup-form label {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .blog-posts {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .blog-post {
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
+            padding: 1.5rem;
+            transition: transform 0.3s ease;
+        }
+
+        .blog-post:hover {
+            transform: translateY(-5px);
+        }
+
+        .blog-post h3 {
+            color: var(--neon-green);
+            margin-bottom: 0.5rem;
+        }
+
+        .blog-post p {
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .blog-post a {
+            color: var(--neon-green);
+            text-decoration: none;
+        }
+
+        .blog-post a:hover {
+            text-decoration: underline;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem 0;
+        }
+
+        .social-icons a {
+            color: var(--neon-green);
+            text-decoration: none;
+            margin: 0 1rem;
+            font-size: 1.2rem;
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .features {
+                grid-template-columns: 1fr;
+            }
+            
+            nav ul {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            nav ul li {
+                margin: 0.5rem 0;
+            }
+        }
+    </style>
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'GA_MEASUREMENT_ID');
+    </script>
+</head>
+<body>
+    <div id="canvas-container"></div>
+    
+    <nav>
+        <ul>
+            <li><a href="quem-somos.html">Quem Somos</a></li>
+            <li><a href="#blog">Blog</a></li>
+            <li><a href="#contact">Contato</a></li>
+            <li><a href="#whitepaper">Whitepaper</a></li>
+            <li><a href="Satoshi_Pitch_Deck/aviso-privacidade.html">Aviso de Privacidade</a></li>
+        </ul>
+    </nav>
+    
+    <div class="container">
+        <header>
+            <img src="imagens/satoshi_logo.png" alt="Satoshi Logo" class="logo" style="margin-top: 100px;">
+            <h1>Revolucione seus investimentos</h1>
+            <button class="button" id="waitlist-button">Entre na fila de espera ⏳</button>
+            <div class="mockup-container">
+                <img src="imagens/mockup.png" alt="Satoshi App Mockup" class="mockup-image" style="width: 50%; height: auto;">
+            </div>
+        </header>
+        
+        <section id="about">
+            <h2>Quem Somos 🤔</h2>
+            <p>Somos uma empresa inovadora focada em revolucionar o mundo dos investimentos através da gamificação e tecnologia de ponta.</p>
+        </section>
+        
+        <section id="features">
+            <h2>Recursos Incríveis ✨</h2>
+            <div class="features">
+                <div class="feature">
+                    <h3>🎮 Simulador Realista</h3>
+                    <p>Pratique suas estratégias em um ambiente de mercado hiper-realista.</p>
+                </div>
+                <div class="feature">
+                    <h3>🏆 Torneios Emocionantes</h3>
+                    <p>Compita com outros traders e ganhe prêmios incríveis.</p>
+                </div>
+                <div class="feature">
+                    <h3>🧠 Aprendizado Gamificado</h3>
+                    <p>Aprenda enquanto se diverte com nosso sistema de gamificação único.</p>
+                </div>
+            </div>
+        </section>
+        
+        <section id="blog">
+            <h2>Blog 📚</h2>
+            <p>Confira nossos últimos artigos sobre investimentos, tecnologia e muito mais.</p>
+            <div class="blog-posts">
+                <div class="blog-post">
+                    <h3>Introdução à Gamificação nos Investimentos</h3>
+                    <p>Descubra como a gamificação está revolucionando a maneira como as pessoas aprendem sobre investimentos.</p>
+                    <a href="#">Leia mais</a>
+                </div>
+                <div class="blog-post">
+                    <h3>5 Dicas para Iniciantes no Mercado de Ações</h3>
+                    <p>Confira estas dicas essenciais antes de fazer seu primeiro investimento em ações.</p>
+                    <a href="#">Leia mais</a>
+                </div>
+                <div class="blog-post">
+                    <h3>O Futuro das Criptomoedas</h3>
+                    <p>Analise as tendências e previsões para o mercado de criptomoedas nos próximos anos.</p>
+                    <a href="#">Leia mais</a>
+                </div>
+            </div>
+        </section>
+        
+        <section id="contact">
+            <h2>Contato 📞</h2>
+            <p>Entre em contato conosco para mais informações:</p>
+            <p><a href="mailto:ola@sousatoshi.com" style="color: #00ff00;">📧 ola@sousatoshi.com</a></p>
+        </section>
+        
+        <section id="whitepaper">
+            <h2>Whitepaper 📄</h2>
+            <p>Leia nosso whitepaper para entender melhor nossa tecnologia e visão.</p>
+            <a href="#" class="button">Download Whitepaper 📥</a>
+        </section>
+    </div>
+    
+    <div id="signup-modal">
+        <form id="signup-form">
+            <h2>Entre na fila de espera 🎟️</h2>
+            <input type="text" id="name" placeholder="Nome 😎" required>
+            <input type="email" id="email" placeholder="Email 📧" required>
+            <select id="investor" required>
+                <option value="">Já investe? 🤑</option>
+                <option value="yes">Sim 👍</option>
+                <option value="no">Não 👎</option>
+            </select>
+            <div id="investment-types" style="display: none;">
+                <p>Escolha suas opções de investimento: 💼</p>
+                <label><input type="checkbox" name="investment" value="acoes"> Ações 📈</label>
+                <label><input type="checkbox" name="investment" value="fundos"> Fundos 🏦</label>
+                <label><input type="checkbox" name="investment" value="renda-fixa"> Renda Fixa 💰</label>
+                <label><input type="checkbox" name="investment" value="poupanca"> Poupança 🐖</label>
+                <label><input type="checkbox" name="investment" value="criptomoedas"> Criptomoedas 🪙</label>
+            </div>
+            <button type="submit" disabled>Enviar 🚀</button>
+        </form>
+    </div>
+
+    <footer>
+        <div class="social-icons">
+            <a href="#" target="_blank">📱 Instagram</a>
+            <a href="#" target="_blank">🐦 Twitter</a>
+            <a href="#" target="_blank">📘 Facebook</a>
+            <a href="#" target="_blank">🎥 TikTok</a>
+        </div>
+    </footer>
+
+    <script>
+        // Three.js background
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.getElementById('canvas-container').appendChild(renderer.domElement);
+
+        const geometry = new THREE.BufferGeometry();
+        const vertices = [];
+        for (let i = 0; i < 10000; i++) {
+            vertices.push(THREE.MathUtils.randFloatSpread(2000));
+            vertices.push(THREE.MathUtils.randFloatSpread(2000));
+            vertices.push(THREE.MathUtils.randFloatSpread(2000));
+        }
+        geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
+        const particles = new THREE.Points(geometry, new THREE.PointsMaterial({ color: 0x39FF14, size: 2 }));
+        scene.add(particles);
+
+        camera.position.z = 1000;
+
+        function animate() {
+            requestAnimationFrame(animate);
+            particles.rotation.x += 0.0001;
+            particles.rotation.y += 0.0001;
+            renderer.render(scene, camera);
+        }
+        animate();
+
+        // Resize handler
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        // Modal and form handling
+        const waitlistButton = document.getElementById('waitlist-button');
+        const signupModal = document.getElementById('signup-modal');
+        const signupForm = document.getElementById('signup-form');
+        const investorSelect = document.getElementById('investor');
+        const investmentTypes = document.getElementById('investment-types');
+        const submitButton = signupForm.querySelector('button[type="submit"]');
+        const inputs = signupForm.querySelectorAll('input, select');
+        const investmentCheckboxes = signupForm.querySelectorAll('input[type="checkbox"]');
+
+        waitlistButton.addEventListener('click', () => {
+            signupModal.style.display = 'flex';
+        });
+
+        signupModal.addEventListener('click', (e) => {
+            if (e.target === signupModal) {
+                signupModal.style.display = 'none';
+            }
+        });
+
+        function validateForm() {
+            let isValid = true;
+            inputs.forEach(input => {
+                if (input.required && !input.value) {
+                    isValid = false;
+                }
+            });
+
+            if (investorSelect.value === 'yes') {
+                let checkedInvestments = 0;
+                investmentCheckboxes.forEach(checkbox => {
+                    if (checkbox.checked) {
+                        checkedInvestments++;
+                    }
+                });
+                if (checkedInvestments === 0) {
+                    isValid = false;
+                }
+            }
+
+            if (isValid) {
+                submitButton.disabled = false;
+                submitButton.classList.add('active');
+            } else {
+                submitButton.disabled = true;
+                submitButton.classList.remove('active');
+            }
+        }
+
+        inputs.forEach(input => {
+            input.addEventListener('input', validateForm);
+        });
+
+        investmentCheckboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', validateForm);
+        });
+
+        investorSelect.addEventListener('change', () => {
+            if (investorSelect.value === 'yes') {
+                investmentTypes.style.display = 'block';
+            } else {
+                investmentTypes.style.display = 'none';
+            }
+            validateForm();
+        });
+
+        signupForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            if (!submitButton.disabled) {
+                // Aqui você pode adicionar a lógica para enviar os dados do formulário
+                const formData = {
+                    name: document.getElementById('name').value,
+                    email: document.getElementById('email').value,
+                    isInvestor: investorSelect.value === 'yes',
+                    investmentTypes: []
+                };
+                if (formData.isInvestor) {
+                    investmentCheckboxes.forEach(checkbox => {
+                        if (checkbox.checked) {
+                            formData.investmentTypes.push(checkbox.value);
+                        }
+                    });
+                }
+                console.log('Dados do formulário:', formData);
+                // Aqui você enviaria os dados para seu servidor
+                // Por exemplo, usando fetch:
+                // fetch('/api/waitlist', {
+                //     method: 'POST',
+                //     headers: {
+                //         'Content-Type': 'application/json',
+                //     },
+                //     body: JSON.stringify(formData),
+                // })
+                // .then(response => response.json())
+                // .then(data => {
+                //     console.log('Success:', data);
+                //     signupModal.style.display = 'none';
+                // })
+                // .catch((error) => {
+                //     console.error('Error:', error);
+                // });
+
+                // Por enquanto, vamos apenas fechar o modal
+                signupModal.style.display = 'none';
+                alert('Obrigado por se inscrever na fila de espera! 🎉');
+            }
+        });
+    </script>
+</body>
+</html>
