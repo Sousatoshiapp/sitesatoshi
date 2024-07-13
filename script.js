@@ -261,4 +261,5 @@
                 alert('Obrigado por se inscrever na fila de espera! 🎉');
             }
         });
-    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="js/script.js"></script>
