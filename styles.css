@@ -1,0 +1,288 @@
+<style>
+        :root {
+            --neon-green: #39FF14;
+            --dark-bg: #050505;
+            --text-color: #ffffff;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--text-color);
+            overflow-x: hidden;
+        }
+        
+        #canvas-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        header {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 2rem 0;
+        }
+        
+        .logo {
+            width: 400px;
+            margin-bottom: 2rem;
+        }
+        
+        h1 {
+            font-size: 1.0rem;
+            margin-bottom: 1rem;
+            text-shadow: 0 0 10px var(--neon-green);
+        }
+        
+        .button {
+            background-color: transparent;
+            border: 2px solid var(--neon-green);
+            color: var(--neon-green);
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 1rem;
+        }
+        
+        .button:hover {
+            background-color: var(--neon-green);
+            color: var(--dark-bg);
+            transform: scale(1.05);
+            box-shadow: 0 0 20px var(--neon-green);
+        }
+        
+        .mockup-container {
+            margin-top: 3rem;
+            text-align: center;
+        }
+        
+        .mockup-image {
+            max-width: 30%;
+            height: auto;
+            box-shadow: 0 0 30px rgba(57, 255, 20, 0.3);
+            border-radius: 20px;
+        }
+
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 1rem;
+            background-color: rgba(5, 5, 5, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+        }
+        
+        nav ul {
+            display: flex;
+            justify-content: center;
+            list-style-type: none;
+        }
+        
+        nav ul li {
+            margin: 0 1rem;
+        }
+        
+        nav ul li a {
+            color: var(--text-color);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        nav ul li a:hover {
+            color: var(--neon-green);
+        }
+        
+        section {
+            padding: 5rem 0;
+        }
+        
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        
+        .feature {
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
+            padding: 2rem;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+        
+        .feature:hover {
+            transform: translateY(-10px);
+        }
+        
+        .feature h3 {
+            color: var(--neon-green);
+            margin-bottom: 1rem;
+        }
+        
+        #signup-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.8);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        #signup-form {
+            background-color: var(--dark-bg);
+            padding: 2rem;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 500px;
+        }
+        
+        #signup-form input,
+        #signup-form select {
+            width: 100%;
+            padding: 0.5rem;
+            margin-bottom: 1rem;
+            background-color: rgba(255,255,255,0.1);
+            border: none;
+            border-radius: 5px;
+            color: var(--text-color);
+        }
+        
+        #signup-form button {
+            width: 100%;
+            padding: 1rem 2rem;
+            background-color: transparent;
+            color: var(--neon-green);
+            border: 2px solid var(--neon-green);
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            opacity: 0.5;
+        }
+
+        #signup-form button:hover:not(:disabled) {
+            background-color: var(--neon-green);
+            color: var(--dark-bg);
+            transform: scale(1.05);
+            box-shadow: 0 0 20px var(--neon-green);
+        }
+
+        #signup-form button:disabled {
+            cursor: not-allowed;
+        }
+
+        #signup-form button.active {
+            opacity: 1;
+        }
+
+        #signup-form input[type="checkbox"] {
+            width: auto;
+            margin-right: 10px;
+        }
+
+        #signup-form label {
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .blog-posts {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .blog-post {
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
+            padding: 1.5rem;
+            transition: transform 0.3s ease;
+        }
+
+        .blog-post:hover {
+            transform: translateY(-5px);
+        }
+
+        .blog-post h3 {
+            color: var(--neon-green);
+            margin-bottom: 0.5rem;
+        }
+
+        .blog-post p {
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .blog-post a {
+            color: var(--neon-green);
+            text-decoration: none;
+        }
+
+        .blog-post a:hover {
+            text-decoration: underline;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem 0;
+        }
+
+        .social-icons a {
+            color: var(--neon-green);
+            text-decoration: none;
+            margin: 0 1rem;
+            font-size: 1.2rem;
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .features {
+                grid-template-columns: 1fr;
+            }
+            
+            nav ul {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            nav ul li {
+                margin: 0.5rem 0;
+            }
+        }
+    </style>
