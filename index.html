@@ -27,7 +27,7 @@
             --dark-bg: #050505;
             --text-color: #ffffff;
         }
-        
+
         body {
             font-family: 'Poppins', sans-serif;
             background-color: var(--dark-bg);
@@ -36,7 +36,7 @@
             margin: 0;
             padding: 0;
         }
-        
+
         #canvas-container {
             position: fixed;
             top: 0;
@@ -45,13 +45,14 @@
             height: 100%;
             z-index: -1;
         }
-        
+
         .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 0 20px;
+            min-height: 200vh; /* Garantir conteúdo suficiente para rolagem */
         }
-        
+
         nav {
             position: fixed;
             top: 0;
@@ -62,27 +63,27 @@
             backdrop-filter: blur(10px);
             z-index: 1000;
         }
-        
+
         nav ul {
             display: flex;
             justify-content: center;
             list-style-type: none;
         }
-        
+
         nav ul li {
             margin: 0 1rem;
         }
-        
+
         nav ul li a {
             color: var(--text-color);
             text-decoration: none;
             transition: color 0.3s ease;
         }
-        
+
         nav ul li a:hover {
             color: var(--neon-green);
         }
-        
+
         section {
             padding: 5rem 0;
         }
@@ -100,17 +101,17 @@
 </head>
 <body>
     <div id="canvas-container"></div>
-    
+
     <nav>
         <ul>
             <li><a href="quem-somos.html">Quem Somos</a></li>
             <li><a href="#blog">Blog</a></li>
             <li><a href="#contact">Contato</a></li>
             <li><a href="#whitepaper">Whitepaper</a></li>
-            <li><a href="Satoshi_Pitch_Deck/aviso-privacidade.html">Aviso de Privacidade</a></li>
+            <li><a href="aviso-privacidade.html">Aviso de Privacidade</a></li>
         </ul>
     </nav>
-    
+
     <div class="container">
         <header>
             <img src="satoshi_logo.png" alt="Satoshi Logo" class="logo" style="margin-top: 100px;">
@@ -120,12 +121,12 @@
                 <img src="mockup.png" alt="Satoshi App Mockup" class="mockup-image" style="width: 50%; height: auto;">
             </div>
         </header>
-        
+
         <section id="about">
             <h2>Quem Somos 🤔</h2>
             <p>Somos uma empresa inovadora focada em revolucionar o mundo dos investimentos através da gamificação e tecnologia de ponta.</p>
         </section>
-        
+
         <section id="features">
             <h2>Recursos Incríveis ✨</h2>
             <div class="features">
@@ -143,7 +144,7 @@
                 </div>
             </div>
         </section>
-        
+
         <section id="blog">
             <h2>Blog 📚</h2>
             <p>Confira nossos últimos artigos sobre investimentos, tecnologia e muito mais.</p>
@@ -165,20 +166,20 @@
                 </div>
             </div>
         </section>
-        
+
         <section id="contact">
             <h2>Contato 📞</h2>
             <p>Entre em contato conosco para mais informações:</p>
             <p><a href="mailto:ola@sousatoshi.com" style="color: #00ff00;">📧 ola@sousatoshi.com</a></p>
         </section>
-        
+
         <section id="whitepaper">
             <h2>Whitepaper 📄</h2>
             <p>Leia nosso whitepaper para entender melhor nossa tecnologia e visão.</p>
             <a href="#" class="button">Download Whitepaper 📥</a>
         </section>
     </div>
-    
+
     <div id="signup-modal">
         <form id="signup-form">
             <h2>Entre na fila de espera 🎟️</h2>
