@@ -97,6 +97,32 @@
             text-align: center;
             padding: 2rem 0;
         }
+
+        .mockup-container img {
+            width: 100%;
+            max-width: 500px;
+            height: auto;
+        }
+
+        /* Responsividade */
+        @media (max-width: 768px) {
+            nav ul {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            nav ul li {
+                margin: 0.5rem 0;
+            }
+
+            header {
+                padding: 1rem 0;
+            }
+
+            section {
+                padding: 2rem 0;
+            }
+        }
     </style>
 </head>
 <body>
@@ -118,7 +144,7 @@
             <h1>Revolucione seus investimentos</h1>
             <button class="button" id="waitlist-button">Entre na fila de espera ⏳</button>
             <div class="mockup-container">
-                <img src="mockup.png" alt="Satoshi App Mockup" class="mockup-image" style="width: 50%; height: auto;">
+                <img src="mockup.png" alt="Satoshi App Mockup" class="mockup-image">
             </div>
         </header>
 
