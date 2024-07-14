@@ -1,10 +1,11 @@
+
 <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', 'GA_MEASUREMENT_ID');
-    </script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'GA_MEASUREMENT_ID');
+</script>
 </head>
 <body>
     <div id="canvas-container"></div>
@@ -119,147 +120,151 @@
     </footer>
 
     <script>
-        // Three.js background
-        const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        const renderer = new THREE.WebGLRenderer();
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        document.getElementById('canvas-container').appendChild(renderer.domElement);
-
-        const geometry = new THREE.BufferGeometry();
-        const vertices = [];
-        for (let i = 0; i < 10000; i++) {
-            vertices.push(THREE.MathUtils.randFloatSpread(2000));
-            vertices.push(THREE.MathUtils.randFloatSpread(2000));
-            vertices.push(THREE.MathUtils.randFloatSpread(2000));
-        }
-        geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
-        const particles = new THREE.Points(geometry, new THREE.PointsMaterial({ color: 0x39FF14, size: 2 }));
-        scene.add(particles);
-
-        camera.position.z = 1000;
-
-        function animate() {
-            requestAnimationFrame(animate);
-            particles.rotation.x += 0.0001;
-            particles.rotation.y += 0.0001;
-            renderer.render(scene, camera);
-        }
-        animate();
-
-        // Resize handler
-        window.addEventListener('resize', () => {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
+        document.addEventListener('DOMContentLoaded', () => {
+            // Three.js background
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer();
             renderer.setSize(window.innerWidth, window.innerHeight);
-        });
+            document.getElementById('canvas-container').appendChild(renderer.domElement);
 
-        // Modal and form handling
-        const waitlistButton = document.getElementById('waitlist-button');
-        const signupModal = document.getElementById('signup-modal');
-        const signupForm = document.getElementById('signup-form');
-        const investorSelect = document.getElementById('investor');
-        const investmentTypes = document.getElementById('investment-types');
-        const submitButton = signupForm.querySelector('button[type="submit"]');
-        const inputs = signupForm.querySelectorAll('input, select');
-        const investmentCheckboxes = signupForm.querySelectorAll('input[type="checkbox"]');
-
-        waitlistButton.addEventListener('click', () => {
-            signupModal.style.display = 'flex';
-        });
-
-        signupModal.addEventListener('click', (e) => {
-            if (e.target === signupModal) {
-                signupModal.style.display = 'none';
+            const geometry = new THREE.BufferGeometry();
+            const vertices = [];
+            for (let i = 0; i < 10000; i++) {
+                vertices.push(THREE.MathUtils.randFloatSpread(2000));
+                vertices.push(THREE.MathUtils.randFloatSpread(2000));
+                vertices.push(THREE.MathUtils.randFloatSpread(2000));
             }
-        });
+            geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
+            const particles = new THREE.Points(geometry, new THREE.PointsMaterial({ color: 0x39FF14, size: 2 }));
+            scene.add(particles);
 
-        function validateForm() {
-            let isValid = true;
-            inputs.forEach(input => {
-                if (input.required && !input.value) {
-                    isValid = false;
+            camera.position.z = 1000;
+
+            function animate() {
+                requestAnimationFrame(animate);
+                particles.rotation.x += 0.0001;
+                particles.rotation.y += 0.0001;
+                renderer.render(scene, camera);
+            }
+            animate();
+
+            // Resize handler
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            });
+
+            // Modal and form handling
+            const waitlistButton = document.getElementById('waitlist-button');
+            const signupModal = document.getElementById('signup-modal');
+            const signupForm = document.getElementById('signup-form');
+            const investorSelect = document.getElementById('investor');
+            const investmentTypes = document.getElementById('investment-types');
+            const submitButton = signupForm.querySelector('button[type="submit"]');
+            const inputs = signupForm.querySelectorAll('input, select');
+            const investmentCheckboxes = signupForm.querySelectorAll('input[type="checkbox"]');
+
+            waitlistButton.addEventListener('click', () => {
+                signupModal.style.display = 'flex';
+            });
+
+            signupModal.addEventListener('click', (e) => {
+                if (e.target === signupModal) {
+                    signupModal.style.display = 'none';
                 }
             });
 
-            if (investorSelect.value === 'yes') {
-                let checkedInvestments = 0;
-                investmentCheckboxes.forEach(checkbox => {
-                    if (checkbox.checked) {
-                        checkedInvestments++;
+            function validateForm() {
+                let isValid = true;
+                inputs.forEach(input => {
+                    if (input.required && !input.value) {
+                        isValid = false;
                     }
                 });
-                if (checkedInvestments === 0) {
-                    isValid = false;
-                }
-            }
 
-            if (isValid) {
-                submitButton.disabled = false;
-                submitButton.classList.add('active');
-            } else {
-                submitButton.disabled = true;
-                submitButton.classList.remove('active');
-            }
-        }
-
-        inputs.forEach(input => {
-            input.addEventListener('input', validateForm);
-        });
-
-        investmentCheckboxes.forEach(checkbox => {
-            checkbox.addEventListener('change', validateForm);
-        });
-
-        investorSelect.addEventListener('change', () => {
-            if (investorSelect.value === 'yes') {
-                investmentTypes.style.display = 'block';
-            } else {
-                investmentTypes.style.display = 'none';
-            }
-            validateForm();
-        });
-
-        signupForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            if (!submitButton.disabled) {
-                // Aqui você pode adicionar a lógica para enviar os dados do formulário
-                const formData = {
-                    name: document.getElementById('name').value,
-                    email: document.getElementById('email').value,
-                    isInvestor: investorSelect.value === 'yes',
-                    investmentTypes: []
-                };
-                if (formData.isInvestor) {
+                if (investorSelect.value === 'yes') {
+                    let checkedInvestments = 0;
                     investmentCheckboxes.forEach(checkbox => {
                         if (checkbox.checked) {
-                            formData.investmentTypes.push(checkbox.value);
+                            checkedInvestments++;
                         }
                     });
+                    if (checkedInvestments === 0) {
+                        isValid = false;
+                    }
                 }
-                console.log('Dados do formulário:', formData);
-                // Aqui você enviaria os dados para seu servidor
-                // Por exemplo, usando fetch:
-                // fetch('/api/waitlist', {
-                //     method: 'POST',
-                //     headers: {
-                //         'Content-Type': 'application/json',
-                //     },
-                //     body: JSON.stringify(formData),
-                // })
-                // .then(response => response.json())
-                // .then(data => {
-                //     console.log('Success:', data);
-                //     signupModal.style.display = 'none';
-                // })
-                // .catch((error) => {
-                //     console.error('Error:', error);
-                // });
 
-                // Por enquanto, vamos apenas fechar o modal
-                signupModal.style.display = 'none';
-                alert('Obrigado por se inscrever na fila de espera! 🎉');
+                if (isValid) {
+                    submitButton.disabled = false;
+                    submitButton.classList.add('active');
+                } else {
+                    submitButton.disabled = true;
+                    submitButton.classList.remove('active');
+                }
             }
+
+            inputs.forEach(input => {
+                input.addEventListener('input', validateForm);
+            });
+
+            investmentCheckboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', validateForm);
+            });
+
+            investorSelect.addEventListener('change', () => {
+                if (investorSelect.value === 'yes') {
+                    investmentTypes.style.display = 'block';
+                } else {
+                    investmentTypes.style.display = 'none';
+                }
+                validateForm();
+            });
+
+            signupForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                if (!submitButton.disabled) {
+                    // Aqui você pode adicionar a lógica para enviar os dados do formulário
+                    const formData = {
+                        name: document.getElementById('name').value,
+                        email: document.getElementById('email').value,
+                        isInvestor: investorSelect.value === 'yes',
+                        investmentTypes: []
+                    };
+                    if (formData.isInvestor) {
+                        investmentCheckboxes.forEach(checkbox => {
+                            if (checkbox.checked) {
+                                formData.investmentTypes.push(checkbox.value);
+                            }
+                        });
+                    }
+                    console.log('Dados do formulário:', formData);
+                    // Aqui você enviaria os dados para seu servidor
+                    // Por exemplo, usando fetch:
+                    // fetch('/api/waitlist', {
+                    //     method: 'POST',
+                    //     headers: {
+                    //         'Content-Type': 'application/json',
+                    //     },
+                    //     body: JSON.stringify(formData),
+                    // })
+                    // .then(response => response.json())
+                    // .then(data => {
+                    //     console.log('Success:', data);
+                    //     signupModal.style.display = 'none';
+                    // })
+                    // .catch((error) => {
+                    //     console.error('Error:', error);
+                    // });
+
+                    // Por enquanto, vamos apenas fechar o modal
+                    signupModal.style.display = 'none';
+                    alert('Obrigado por se inscrever na fila de espera! 🎉');
+                }
+            });
         });
+    </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-<script src="js/script.js"></script>
+    <script src="js/script.js"></script>
+</body>
